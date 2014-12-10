@@ -1,0 +1,18 @@
+{
+  "name": "jasonagnew/wpf",
+  "description": "Wordpress Plugin Framework",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "require": {
+    "composer/installers": "~1.0",
+    "twig/twig": "1.6.*",
+    "illuminate/database": "4.2.*"
+  },
+  "autoload": {
+    "classmap": [
+      "framework",
+      "plugin/controllers",
+      "plugin/models"
+    ]
+  }
+}
