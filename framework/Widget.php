@@ -1,25 +1,38 @@
-<?php
+<?php namespace Herbert\Framework;
 
-namespace Herbert\Framework;
+use Herbert\Framework\Traits\PluginAccessorTrait;
 
-class Widget
-{
+class Widget {
 
-    private $plugin;
+    use PluginAccessorTrait;
 
-    public function __construct($plugin)
+    /**
+     * @var \Herbert\Framework\Plugin
+     */
+    protected $plugin;
+
+    /**
+     * @param \Herbert\Framework\Plugin $plugin
+     */
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
     }
 
+    /**
+     * Registers a widget.
+     *
+     * @param $widget
+     */
     public function register($widget)
     {
-        $plugin = $this->plugin;
-        require_once $this->plugin->config['path']['widgets'] . $widget . '.php';
-        \add_action('widgets_init', function () use ($widget, $plugin) {
+        require_once $this->config['path']['widgets'] . $widget . '.php';
+
+        \add_action('widgets_init', function () use ($widget) {
             global $wp_widget_factory;
+
             \register_widget($widget);
-            $wp_widget_factory->widgets[$widget]->boot($plugin);
+            $wp_widget_factory->widgets[$widget]->boot($this->plugin);
         });
     }
 

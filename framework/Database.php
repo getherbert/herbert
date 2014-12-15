@@ -1,21 +1,30 @@
-<?php
-
-
-namespace Herbert\Framework;
+<?php namespace Herbert\Framework;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class Database
-{
+class Database {
 
-    private $plugin;
-    public $capsule;
+    /**
+     * @var \Herbert\Framework\Plugin
+     */
+    protected $plugin;
 
-    public function __construct($plugin)
+    /**
+     * @var \Illuminate\Database\Capsule\Manager
+     */
+    protected $capsule;
+
+    /**
+     * @param \Herbert\Framework\Plugin $plugin
+     */
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
     }
 
+    /**
+     * Boots eloquent.
+     */
     public function eloquent()
     {
         global $wpdb;
@@ -31,6 +40,7 @@ class Database
             'collation' => 'utf8_unicode_ci',
             'prefix' => $wpdb->prefix
         ]);
+
         $this->capsule->setAsGlobal();
         $this->capsule->bootEloquent();
     }

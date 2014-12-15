@@ -1,26 +1,49 @@
-<?php
+<?php namespace Herbert\Framework;
 
-namespace Herbert\Framework;
+use Herbert\Framework\Traits\PluginAccessorTrait;
+use Twig_Autoloader;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 
-class View
-{
+class View {
 
+    use PluginAccessorTrait;
+
+    /**
+     * @var \Herbert\Framework\Plugin
+     */
+    protected $plugin;
+
+    /**
+     * @var \Twig_Environment
+     */
     public $twig;
-    public $plugin;
 
-    public function  __construct($plugin)
+    /**
+     * @param \Herbert\Framework\Plugin $plugin
+     */
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
-        \Twig_Autoloader::register();
-        $loader = new \Twig_Loader_Filesystem($plugin->config['path']['views']);
-        $this->twig = new \Twig_Environment($loader, array(
+
+        Twig_Autoloader::register();
+        $loader = new Twig_Loader_Filesystem($this->config['path']['views']);
+        $this->twig = new Twig_Environment($loader, array(
             'cache' => false
         ));
     }
 
+    /**
+     * @todo description
+     *
+     * @param $path
+     * @param $attrs
+     * @return string
+     */
     public function render($path, $attrs)
     {
         $attrs['plugin'] = $this->plugin;
+
         return $this->twig->render($path . '.twig', $attrs);
     }
 }

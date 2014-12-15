@@ -1,80 +1,59 @@
-<?php
+<?php namespace Herbert\Framework;
 
-namespace Herbert\Framework;
+/**
+ * Class Plugin
+ * @package Herbert\Framework
+ * @property Message $message
+ * @property Controller $controller
+ * @property General $general
+ * @property Response $response
+ * @property View $view
+ * @property Panel $panel
+ * @property Route $route
+ * @property Http $http
+ * @property Enqueue $enqueue
+ * @property Database $database
+ * @property Shortcode $shortcode
+ * @property Widget $widget
+ */
+class Plugin {
 
-class Plugin
-{
+    /**
+     * The instance container.
+     *
+     * @var array
+     */
+    protected $container = [];
 
-    public $controller;
-    public $general;
-    public $view;
-    public $panel;
-    public $route;
-    public $http;
-    public $enqueue;
-    public $database;
-    public $url;
-    public $path;
-    public $config;
-    public $response;
-    public $siteUrl;
-    public $adminUrl;
-    public $shortcode;
-    public $api;
-    public $widget;
-    public $message;
-    public $name;
-
+    /**
+     *
+     */
     public function __construct()
     {
-        $this->getConfig();
-        $this->assignClasses();
-        $this->build($this);
+        $this->configure();
+        $this->containDefaults();
+        $this->build();
     }
 
-    public function build($plugin)
+    /**
+     * Gets the config.
+     */
+    protected function configure()
     {
-        require_once $this->config['path']['plugin'] . 'activate.php';
-        require_once  $this->config['path']['plugin'] . 'deactivate.php';
-        require_once  $this->config['path']['plugin'] . 'panels.php';
-        require_once  $this->config['path']['plugin'] . 'routes.php';
-        require_once  $this->config['path']['plugin'] . 'enqueue.php';
-        require_once  $this->config['path']['plugin'] . 'api.php';
-        require_once  $this->config['path']['plugin'] . 'shortcodes.php';
-        require_once  $this->config['path']['plugin'] . 'widgets.php';
-    }
-
-    private function assignClasses()
-    {
-        $this->message = new Message($this);
-        $this->controller = new Controller($this);
-        $this->general = new General($this);
-        $this->response = new Response($this);
-        $this->view = new View($this);
-        $this->panel = new Panel($this);
-        $this->route = new Route($this);
-        $this->http = new Http($this);
-        $this->enqueue = new Enqueue($this);
-        $this->database = new Database($this);
-        $this->shortcode = new Shortcode($this);
-        $this->widget = new Widget($this);
-    }
-
-    private function getConfig()
-    {
-        require_once __DIR__ . '/../config.php';
+        define('HERBERT_CONFIG', true);
+        $config = require_once __DIR__ . '/../config.php';
 
         $siteUrl = get_site_url();
-        $this->siteUrl = rtrim($siteUrl, "/");
+        $this->siteUrl = rtrim($siteUrl, '/');
 
         $adminUrl = get_admin_url();
-        $this->adminUrl = rtrim($adminUrl, "/");
+        $this->adminUrl = rtrim($adminUrl, '/');
 
         $this->name = $config['name'];
 
         $c = $config;
 
-        $c['path']['base'] = str_replace("framework/Plugin.php", "", __FILE__);
+        $c['path']['base'] = str_replace('framework/Plugin.php', '', __FILE__);
         $c['path']['core'] = $c['path']['base'] . $c['core'];
         $c['path']['plugin'] = $c['path']['base'] . $c['plugin'] . '/';
         $c['path']['controllers'] = $c['path']['plugin'] . 'controllers' . '/';
@@ -82,12 +61,83 @@ class Plugin
         $c['path']['assets'] = $c['path']['plugin'] . $c['assets'] . '/';
         $c['path']['widgets'] = $c['path']['plugin'] . 'widgets' . '/';
 
-        $c['url']['base'] = str_replace("framework/", "", plugin_dir_url(__FILE__));
+        $c['url']['base'] = str_replace('framework/', '', plugin_dir_url(__FILE__));
         $c['url']['plugin'] = $c['url']['base'] . $c['plugin'] . '/';
         $c['url']['assets'] = $c['url']['plugin'] . $c['assets'] . '/';
 
         $this->config = $c;
+    }
 
+    /**
+     * Contains all default instances.
+     */
+    protected function containDefaults()
+    {
+        $this->contain('message', new Message($this));
+        $this->contain('controller', new Controller($this));
+        $this->contain('general', new General($this));
+        $this->contain('response', new Response($this));
+        $this->contain('view', new View($this));
+        $this->contain('panel', new Panel($this));
+        $this->contain('route', new Route($this));
+        $this->contain('http', new Http($this));
+        $this->contain('enqueue', new Enqueue($this));
+        $this->contain('database', new Database($this));
+        $this->contain('shortcode', new Shortcode($this));
+        $this->contain('widget', new Widget($this));
+    }
+
+    /**
+     * Builds the plugin.
+     */
+    protected function build()
+    {
+        $plugin = $this;
+
+        require_once $this->config['path']['plugin'] . 'activate.php';
+        require_once $this->config['path']['plugin'] . 'deactivate.php';
+        require_once $this->config['path']['plugin'] . 'panels.php';
+        require_once $this->config['path']['plugin'] . 'routes.php';
+        require_once $this->config['path']['plugin'] . 'enqueue.php';
+        require_once $this->config['path']['plugin'] . 'api.php';
+        require_once $this->config['path']['plugin'] . 'shortcodes.php';
+        require_once $this->config['path']['plugin'] . 'widgets.php';
+    }
+
+    /**
+     * Contains an instance.
+     *
+     * @param $name
+     * @param $content
+     */
+    public function contain($name, $content)
+    {
+        $this->container[$name] = $content;
+    }
+
+    /**
+     * Magic getter to bypass referencing plugin.
+     *
+     * @param $prop
+     * @return mixed
+     */
+    public function __get($prop)
+    {
+        if (array_key_exists($prop, $this->container))
+            return $this->container[$prop];
+
+        return $this->{$prop};
+    }
+
+    /**
+     * Magic isset to bypass referencing plugin.
+     *
+     * @param $prop
+     * @return mixed
+     */
+    public function __isset($prop)
+    {
+        return isset($this->{$prop}) || isset($this->container[$prop]);
     }
 
 }

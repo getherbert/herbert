@@ -1,62 +1,89 @@
-<?php
+<?php namespace Herbert\Framework;
 
-namespace Herbert\Framework;
+class Http {
 
-class Http
-{
+    /**
+     * @var \Herbert\Framework\Plugin
+     */
+    protected $plugin;
 
-    private $plugin;
-
-    public function __construct($plugin)
+    /**
+     * @param \Herbert\Framework\Plugin $plugin
+     */
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
     }
 
-    public function get($var, $default = "")
+    /**
+     * Gets a request parameter.
+     *
+     * @param        $var
+     * @param string $default
+     * @return string
+     */
+    public function get($var, $default = '')
     {
-        $res = $_GET;
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $res = $_POST;
-        }
+        $res = $this->all();
 
-        if (!isset($res[$var]) || empty($res[$var])) {
+        if (!isset($res[$var]) || empty($res[$var]))
+        {
             return $default;
         }
 
         return $res[$var];
     }
 
+    /**
+     * Check if a request parameter exists.
+     *
+     * @param $var
+     * @return bool
+     */
     public function has($var)
     {
-        if (!$this->get($var, false)) {
-            return true;
-        }
-        return false;
+        return $this->get($var, null) !== null;
     }
 
+    /**
+     * Gets all the request parameters.
+     *
+     * @return mixed
+     */
     public function all()
     {
-        $res = $_GET;
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $res = $_POST;
-        }
-        return $res;
+        return $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
     }
 
+    /**
+     * @todo description
+     *
+     * @return array
+     */
     public function put()
     {
-        $res = [];
-        $this->parseRawHttpRequest($res);
+        $this->parseRawHttpRequest($res = []);
+
         return $res;
     }
 
+    /**
+     * @todo description
+     *
+     * @return array
+     */
     public function delete()
     {
-        $res = [];
-        $this->parseRawHttpRequest($res);
+        $this->parseRawHttpRequest($res = []);
+
         return $res;
     }
 
+    /**
+     * @todo description
+     *
+     * @param array $a_data
+     */
     private function parseRawHttpRequest(array &$a_data)
     {
         // read incoming data
@@ -71,22 +98,27 @@ class Http
         array_pop($a_blocks);
 
         // loop data blocks
-        foreach ($a_blocks as $id => $block) {
-            if (empty($block)) {
+        foreach ($a_blocks as $id => $block)
+        {
+            if (empty($block))
+            {
                 continue;
             }
 
             // you'll have to var_dump $block to understand this and maybe replace \n or \r with a visibile char
 
             // parse uploaded files
-            if (strpos($block, 'application/octet-stream') !== false) {
+            if (strpos($block, 'application/octet-stream') !== false)
+            {
                 // match "name", then everything after "stream" (optional) except for prepending newlines
                 preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
             } // parse all other fields
-            else {
+            else
+            {
                 // match "name" and optional value in between newline sequences
                 preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
             }
+
             $a_data[$matches[1]] = $matches[2];
         }
     }

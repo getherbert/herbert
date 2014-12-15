@@ -1,42 +1,62 @@
-<?php
+<?php namespace Herbert\Framework;
 
-namespace Herbert\Framework;
+use Herbert\Framework\Traits\PluginAccessorTrait;
 
-class Shortcode
-{
+class Shortcode {
 
-    private $plugin;
+    use PluginAccessorTrait;
 
-    public function __construct($plugin)
+    /**
+     * @var \Herbert\Framework\Plugin
+     */
+    protected $plugin;
+
+    /**
+     * @param \Herbert\Framework\Plugin $plugin
+     */
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
     }
 
-    public function add($shortcode, $api, $args = [])
+    /**
+     * @todo description
+     *
+     * @param       $shortcode
+     * @param       $fn
+     * @param array $args
+     */
+    public function add($shortcode, $fn, $args = [])
     {
-        $apiInstance = $this->plugin->api;
-        \add_shortcode($shortcode, function ($atts) use ($apiInstance, $api, $args) {
-
-            if (!empty($args)) {
+        \add_shortcode($shortcode, function ($atts) use ($fn, $args) {
+            if (!empty($args))
+            {
                 $atts = $this->renameArguments($args, $atts);
             }
 
-            if (!empty($atts)) {
-                call_user_func_array([$apiInstance, $api], $atts);
-            } else {
-                $apiInstance->$api();
-            }
+            call_user_func_array([$this->api, $fn], $atts);
         });
     }
 
+    /**
+     * @todo description
+     *
+     * @param $arguments
+     * @param $attributes
+     * @return array
+     */
     public function renameArguments($arguments, $attributes)
     {
         $output = [];
         array_walk($attributes, function ($value, $key) use ($arguments, &$output) {
-            if (isset($arguments[$key])) {
-                $output[$arguments[$key]] = $value;
+            if (!isset($arguments[$key]))
+            {
+                return;
             }
+
+            $output[$arguments[$key]] = $value;
         });
+
         return $output;
     }
 

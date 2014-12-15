@@ -1,8 +1,6 @@
 <?php
 
-class Api extends Herbert\Framework\BaseController {
-
-
+class Api extends BaseController {
 
 }
 

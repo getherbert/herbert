@@ -1,46 +1,59 @@
-<?php
+<?php namespace Herbert\Framework;
 
-namespace Herbert\Framework;
+class Controller {
 
-class Controller
-{
+    /**
+     * @var \Herbert\Framework\Plugin
+     */
+    protected $plugin;
 
-    private $plugin;
-
-    public function __construct($plugin)
+    /**
+     * @param \Herbert\Framework\Plugin $plugin
+     */
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
     }
 
+    /**
+     * Calls a controller's response.
+     *
+     * @param       $callback
+     * @param array $args
+     */
     public function call($callback, $args = [])
     {
-        if (is_string($callback)) {
-            list($controller, $method) = explode('@', $callback, 2);
-            //require_once $this->plugin->config['path']['controllers'] . $controller . '.php';
-            $controllerInstance = new $controller($this->plugin);
-            if (!empty($args)) {
-                echo call_user_func_array([$controllerInstance, $method], $args);
-            } else {
-                echo $controllerInstance->$method();
-            }
-        } else {
-            if (!empty($args)) {
-                echo call_user_func_array($callback, $args);
-            } else {
-                echo $callback();
-            }
-        }
+        echo $this->fetch($callback, $args);
     }
 
+    /**
+     * Fetches a controller's response.
+     *
+     * @param       $callback
+     * @param array $args
+     * @return mixed
+     */
     public function fetch($callback, $args = [])
     {
-        list($controller, $method) = explode('@', $callback, 2);
+        if (is_string($callback))
+        {
+            list($class, $method) = explode('@', $callback, 2);
+            $controller = new $class($this->plugin);
 
-        $controllerInstance = new $controller($this->plugin);
-        if (!empty($args)) {
-            return call_user_func_array([$controllerInstance, $method], $args);
-        } else {
-            return $controllerInstance->$method();
+            if (!empty($args))
+            {
+                return call_user_func_array([$controller, $method], $args);
+            }
+
+            return $controller->$method();
         }
+
+        if (!empty($args))
+        {
+            return call_user_func_array($callback, $args);
+        }
+
+        return $callback();
     }
+
 }

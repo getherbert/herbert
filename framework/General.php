@@ -1,32 +1,47 @@
-<?php
+<?php namespace Herbert\Framework;
 
-namespace Herbert\Framework;
+use Herbert\Framework\Traits\PluginAccessorTrait;
 
-class General
-{
+class General {
 
-    private $plugin;
+    use PluginAccessorTrait;
 
-    public function __construct($plugin)
+    /**
+     * @var \Herbert\Framework\Plugin
+     */
+    protected $plugin;
+
+    /**
+     * @param \Herbert\Framework\Plugin $plugin
+     */
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
     }
 
+    /**
+     * Activates the plugin.
+     *
+     * @param $callback
+     */
     public function activate($callback)
     {
-        \register_activation_hook(
-            $this->plugin->config['path']['core'],
-            function () use ($callback) {
-                $this->plugin->controller->call($callback);
-            });
+        \register_activation_hook($this->config['path']['core'], function () use ($callback)
+        {
+            $this->controller->call($callback);
+        });
     }
 
+    /**
+     * Deactivates the plugin.
+     *
+     * @param $callback
+     */
     public function deactivate($callback)
     {
-        \register_deactivation_hook(
-            $this->plugin->config['path']['core'],
-            function () use ($callback) {
-                $this->plugin->controller->call($callback);
-            });
+        \register_deactivation_hook($this->config['path']['core'], function () use ($callback)
+        {
+            $this->controller->call($callback);
+        });
     }
 }

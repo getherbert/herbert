@@ -1,46 +1,70 @@
-<?php
+<?php namespace Herbert\Framework;
 
-namespace Herbert\Framework;
+class Panel {
 
-class Panel
-{
+    /**
+     * @var \Herbert\Framework\Plugin
+     */
+    protected $plugin;
 
-    private $plugin;
     private $panels;
 
-    public function __construct($plugin)
+    /**
+     * @param \Herbert\Framework\Plugin $plugin
+     */
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
     }
 
+    /**
+     * @todo description
+     *
+     * @param $attrs
+     * @param $callback
+     */
     public function add($attrs, $callback)
     {
         $attrs['uses'] = $callback;
         $this->panels[$attrs['as']] = $attrs;
-        \add_action('admin_menu', function () use ($attrs) {
-            if ($attrs['type'] == 'panel') {
+
+        \add_action('admin_menu', function () use ($attrs)
+        {
+            if ($attrs['type'] == 'panel')
+            {
                 $this->addPanel($attrs);
-            } else {
-                if ($attrs['type'] == 'subpanel' || $attrs['type'] == 'wp-subpanel') {
-                    $this->addSubpanel($attrs);
-                }
+            }
+            elseif ($attrs['type'] == 'subpanel' || $attrs['type'] == 'wp-subpanel')
+            {
+                $this->addSubpanel($attrs);
             }
         });
     }
 
+    /**
+     * @todo description
+     *
+     * @param $attrs
+     */
     public function renameDefaultSubpanel($attrs)
     {
         $defaultAttrs = $this->panels[$attrs['default']];
+
         $defaultAttrs['title'] = $attrs['title'];
         $defaultAttrs['as'] = 'renameDefaultSubpanel';
         $defaultAttrs['type'] = 'subpanel';
         $defaultAttrs['parent'] = $attrs['default'];
-        $this->add($defaultAttrs, "");
+
+        $this->add($defaultAttrs, '');
     }
 
+    /**
+     * @todo description
+     *
+     * @param $attrs
+     */
     public function addPanel($attrs)
     {
-
         $icon = $this->fetchIcon($attrs);
 
         \add_menu_page(
@@ -48,47 +72,59 @@ class Panel
             $attrs['title'],
             'manage_options',
             $attrs['slug'],
-            function () use ($attrs) {
+            function () use ($attrs)
+            {
                 $this->plugin->controller->call($attrs['uses']);
-            }, $icon);
+            }, $icon
+        );
     }
 
+    /**
+     * @todo description
+     *
+     * @param $attrs
+     * @return string
+     */
     public function fetchIcon($attrs)
     {
-        if (!isset($attrs['icon']) || empty($attrs['icon'])) {
+        if (!isset($attrs['icon']) || empty($attrs['icon']))
+        {
             return '';
         }
 
-        if (substr($attrs['icon'], 0, 9) === "dashicons"
-            || substr($attrs['icon'], 0, 5) === "data:"
-            || substr($attrs['icon'], 0, 2) === "//"
-            || $attrs['icon'] == 'none'
-        ) {
+        if (substr($attrs['icon'], 0, 9) === "dashicons" || substr($attrs['icon'], 0, 5) === "data:"
+            || substr($attrs['icon'], 0, 2) === "//" || $attrs['icon'] == 'none')
+        {
             return $attrs['icon'];
         }
 
         $attrs['icon'] = ltrim($attrs['icon'], '/');
-        return $this->plugin->config['url']['assets'] . $attrs['icon'];
+        return $this->config['url']['assets'] . $attrs['icon'];
     }
 
+    /**
+     * @todo description
+     *
+     * @param $attrs
+     */
     public function addSubpanel($attrs)
     {
-        if (!isset($attrs['parent'])) {
+        if (!isset($attrs['parent']))
+        {
             new \WP_Error('broke', __("Subpanel needs a parent defined", null));
         }
 
-        if (!isset($this->panels[$attrs['parent']]['slug']) || $attrs['type'] == 'wp-subpanel') {
+        if (!isset($this->panels[$attrs['parent']]['slug']) || $attrs['type'] == 'wp-subpanel')
+        {
             new \WP_Error('broke', __("Unknown parent for subpanel", null));
         }
 
-        $topSubpanel = false;
-        if ($this->panels[$attrs['parent']]['slug'] == $attrs['slug']) {
-            $topSubpanel = true;
-        }
+        $topSubpanel = $this->panels[$attrs['parent']]['slug'] === $attrs['slug'];
 
         $parentSlug = $this->panels[$attrs['parent']]['slug'];
 
-        if ($attrs['type'] == 'wp-subpanel') {
+        if ($attrs['type'] == 'wp-subpanel')
+        {
             $parentSlug = $attrs['parent'];
         }
 
@@ -99,35 +135,52 @@ class Panel
             'manage_options',
             $attrs['slug'],
             function () use ($attrs, $topSubpanel) {
-                if (!$topSubpanel) {
+                if (!$topSubpanel)
+                {
                     $this->plugin->controller->call($attrs['uses']);
                 }
             });
     }
 
-
+    /**
+     * @todo description
+     *
+     * @return string
+     */
     private function getCurrentFilter()
     {
-        if (function_exists('current_filter')) {
+        if (function_exists('current_filter'))
+        {
             return \current_filter();
-        } else {
-            return 'panel';
         }
+
+        return 'panel';
     }
 
+    /**
+     * Gets the panels.
+     *
+     * @return mixed
+     */
     public function getPanels()
     {
         return $this->panels;
     }
 
+    /**
+     * @todo description
+     *
+     * @param $name
+     * @return string
+     */
     public function url($name)
     {
-        $panel = [];
-        if (isset($this->panels[$name])) {
-            $panel = $this->panels[$name];
-        } else {
-            return "";
+        if (!isset($this->panels[$name]))
+        {
+            return '';
         }
-        return $this->plugin->adminUrl . '/admin.php?page=' . $panel['slug'];
+
+        return $this->adminUrl . '/admin.php?page=' . $this->panels[$name]['slug'];
     }
+
 }

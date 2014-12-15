@@ -1,17 +1,35 @@
-<?php
+<?php namespace Herbert\Framework;
 
-namespace Herbert\Framework;
+use Herbert\Framework\Traits\PluginAccessorTrait;
 
-class Route
-{
+class Route {
 
-    private $plugin;
+    use PluginAccessorTrait;
+
+    /**
+     * @var array
+     */
+    protected static $routeBuilders = [
+        'get',
+        'post',
+        'put',
+        'delete'
+    ];
+
+    /**
+     * @var \Herbert\Framework\Plugin
+     */
+    protected $plugin;
+
     private $routes;
     private $routeVars;
     private $routeNames;
     private $regex = '/(?::[a-z][a-z0-9_]*)/';
 
-    public function __construct($plugin)
+    /**
+     * @param \Herbert\Framework\Plugin $plugin
+     */
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
 
@@ -20,14 +38,27 @@ class Route
         \add_action('parse_request', [$this, 'parseRequest']);
     }
 
+    /**
+     * @todo description
+     *
+     * @param $attrs
+     * @param $method
+     */
     private function add($attrs, $method)
     {
         $this->routes[$method][$attrs['as']] = $attrs;
-        \add_action('init', function () use ($attrs, $method) {
+        \add_action('init', function () use ($attrs, $method)
+        {
             $this->addRoute($attrs, $method);
         });
     }
 
+    /**
+     * @todo description
+     *
+     * @param $attrs
+     * @param $method
+     */
     public function addRoute($attrs, $method)
     {
         $uri = preg_replace(
@@ -49,8 +80,10 @@ class Route
         $this->routes[$method][$attrs['as']]['vars'] = [];
 
         $url = 'index.php?route_name=' . $attrs['as'];
-        if (isset($vars[0][0])) {
+        if (isset($vars[0][0]))
+        {
             $this->routes[$method][$attrs['as']]['vars'] = $vars[0];
+
             $queryVars = [];
             $i = 1;
             foreach ($vars[0] as $var) {
@@ -60,6 +93,7 @@ class Route
                 \add_rewrite_tag('%' . $var . '%', '(.+)');
                 $i++;
             }
+
             $queryVars['route_name'] = $attrs['as'];
             $url = 'index.php?' . urldecode(http_build_query($queryVars));
         }
@@ -71,96 +105,136 @@ class Route
         );
     }
 
+    /**
+     * @todo description
+     *
+     * @param $name
+     * @param $method
+     * @param $get
+     */
     public function processRoute($name, $method, $get)
     {
-        if (!$this->routes[$method][$name]) {
+        if (!$this->routes[$method][$name])
+        {
             $uri = $this->routeNames[$name];
             $name = array_search($uri, $this->routeNames);
-            if (!$this->routes[$method][$name]) {
-                die("No Route");
+
+            if (!$this->routes[$method][$name])
+            {
+                die('No Route');
             }
         }
 
         $attrs = $this->routes[$method][$name];
         $vars = $this->routeVars[$method][$name];
         $args = [];
-        foreach ($vars as $var) {
+        foreach ($vars as $var)
+        {
             $args[$var] = $get[$var];
         }
 
-        $this->plugin->controller->call($attrs['uses'], $args);
+        $this->controller->call($attrs['uses'], $args);
     }
 
+    /**
+     * @todo description
+     *
+     * @param       $name
+     * @param array $args
+     * @return string
+     */
     public function url($name, $args = [])
     {
         $route = [];
-        if (isset($this->routes['GET'][$name])) {
-            $route = $this->routes['GET'][$name];
-        } else {
-            if (isset($this->routes['POST'][$name])) {
-                $route = $this->routes['POST'][$name];
-            } else {
-                if (isset($this->routes['PUT'][$name])) {
-                    $route = $this->routes['PUT'][$name];
-                } else {
-                    if (isset($this->routes['DELETE'][$name])) {
-                        $route = $this->routes['DELETE'][$name];
-                    } else {
-                        return "";
-                    }
-                }
+        foreach (['GET', 'POST', 'PUT', 'DELETE'] as $method)
+        {
+            if (isset($this->routes[$method]))
+            {
+                $route = $this->routes[$method];
+
+                break;
             }
         }
 
-        if (!empty($route['vars']) && !empty($args) && count($route['vars']) == count($args)) {
+        if ($route === [])
+        {
+            return '';
+        }
+
+        if (!empty($route['vars']) && !empty($args) && count($route['vars']) === count($args))
+        {
             $pairs = array_combine($route['vars'], $args);
             $route['uri'] = strtr($route['uri'], $pairs);
         }
 
-        return $this->plugin->siteUrl . $route['uri'];
+        return $this->siteUrl . $route['uri'];
     }
 
-    public function get($attrs, $callback)
+    /**
+     * Builds a route.
+     *
+     * @param $method
+     * @param $attrs
+     * @param $callback
+     */
+    protected function buildRoute($method, $attrs, $callback)
     {
         $attrs['uses'] = $callback;
-        $this->add($attrs, "GET");
+        $this->add($attrs, strtoupper($method));
     }
 
-    public function post($attrs, $callback)
+    /**
+     * Magic method calling.
+     *
+     * @param       $method
+     * @param array $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters = [])
     {
-        $attrs['uses'] = $callback;
-        $this->add($attrs, "POST");
+        if (method_exists($this, $method))
+        {
+            return call_user_func_array([$this, $method], $parameters);
+        }
+
+        if (in_array($method, self::$routeBuilders))
+        {
+            return call_user_func_array([$this, 'buildRoute'], array_merge([$method], $parameters));
+        }
     }
 
-    public function put($attrs, $callback)
-    {
-        $attrs['uses'] = $callback;
-        $this->add($attrs, "PUT");
-    }
-
-    public function delete($attrs, $callback)
-    {
-        $attrs['uses'] = $callback;
-        $this->add($attrs, "DELETE");
-    }
-
+    /**
+     * @todo description
+     */
     public function addRouteTag()
     {
         \add_rewrite_tag('%route_name%', '(.+)');
     }
 
+    /**
+     * @todo description
+     */
     public function flushRules()
     {
         \flush_rewrite_rules();
     }
 
+    /**
+     * @todo description
+     *
+     * @param $wp
+     */
     public function parseRequest($wp)
     {
-        if (array_key_exists('route_name', $wp->query_vars)) {
+        if (array_key_exists('route_name', $wp->query_vars))
+        {
             $name = $wp->query_vars['route_name'];
             $method = $_SERVER['REQUEST_METHOD'];
+
             $this->processRoute($name, $method, $wp->query_vars);
+
             die(0);
         }
     }
+
 }

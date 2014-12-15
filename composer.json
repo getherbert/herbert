@@ -1,11 +1,11 @@
 {
-  "name": "jasonagnew/wpf",
-  "description": "Wordpress Plugin Framework",
+  "name": "getherbert/herbert",
+  "description": "Herbert",
   "type": "wordpress-plugin",
   "license": "MIT",
   "require": {
-    "composer/installers": "~1.0",
-    "twig/twig": "1.6.*",
+    "composer/installers": "1.0.*",
+    "twig/twig": "1.16.*",
     "illuminate/database": "4.2.*"
   },
   "autoload": {
