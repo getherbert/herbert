@@ -34,7 +34,7 @@ class View {
     }
 
     /**
-     * @todo description
+     * Render the view using twig
      *
      * @param $path
      * @param $attrs

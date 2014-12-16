@@ -20,7 +20,7 @@ class Shortcode {
     }
 
     /**
-     * @todo description
+     * Call Api method and attach it to Wordpress 'add_shortcode'
      *
      * @param       $shortcode
      * @param       $fn
@@ -39,7 +39,8 @@ class Shortcode {
     }
 
     /**
-     * @todo description
+     * Renames Shortcode arguments in a 'from => to' format
+     * eg: my_name => myName
      *
      * @param $arguments
      * @param $attributes

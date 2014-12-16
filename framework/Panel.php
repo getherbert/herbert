@@ -18,7 +18,9 @@ class Panel {
     }
 
     /**
-     * @todo description
+     * Checks panel type and either calls 'addPanel()'
+     * or 'addSubPanel()'. These are added to Wordpress
+     * 'add_action'
      *
      * @param $attrs
      * @param $callback
@@ -42,7 +44,8 @@ class Panel {
     }
 
     /**
-     * @todo description
+     * Renames default subpanel by adding a new Panel
+     * with same slug and the new name.
      *
      * @param $attrs
      */
@@ -59,7 +62,8 @@ class Panel {
     }
 
     /**
-     * @todo description
+     * Fetches the controller method and other attributes
+     * before attaching them to Wordpress 'add_menu_page'
      *
      * @param $attrs
      */
@@ -80,7 +84,8 @@ class Panel {
     }
 
     /**
-     * @todo description
+     * Fetches the right icon type. Checks to see if
+     * its a relative path, http or dashicons.
      *
      * @param $attrs
      * @return string
@@ -103,7 +108,9 @@ class Panel {
     }
 
     /**
-     * @todo description
+     * First checks the Subpanel parent exists then
+     * fetches the controller method and other attributes
+     * before attaching them to Wordpress 'add_menu_page'
      *
      * @param $attrs
      */
@@ -143,21 +150,6 @@ class Panel {
     }
 
     /**
-     * @todo description
-     *
-     * @return string
-     */
-    private function getCurrentFilter()
-    {
-        if (function_exists('current_filter'))
-        {
-            return \current_filter();
-        }
-
-        return 'panel';
-    }
-
-    /**
      * Gets the panels.
      *
      * @return mixed
@@ -168,7 +160,7 @@ class Panel {
     }
 
     /**
-     * @todo description
+     * Return the URL for a panel
      *
      * @param $name
      * @return string

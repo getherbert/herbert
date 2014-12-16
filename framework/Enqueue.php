@@ -36,7 +36,10 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Checks if the enqueue passes any filters applied,
+     * then appends the site url to the path before calling
+     * wp_enqueue_style or wp_enqueue_script depending on there
+     * extension
      *
      * @param $attrs
      * @param $footer
@@ -97,7 +100,7 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Adds the enqueue to add_action related to admin pages
      *
      * @param        $attrs
      * @param string $footer
@@ -112,7 +115,7 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Adds the enqueue to add_action related to login pages
      *
      * @param        $attrs
      * @param string $footer
@@ -126,7 +129,7 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Adds the enqueue to add_action related to front pages
      *
      * @param        $attrs
      * @param string $footer
@@ -140,9 +143,9 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Checks if footer flag is set.
      *
-     * @param $footer
+     * @param string $footer
      * @return bool
      */
     protected function setFooterFlag($footer)
@@ -151,7 +154,9 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Filter by Hook (Wordpress standard panels),
+     * if '*' is provided then pass as this means it
+     * should work on all admin panels.
      *
      * @param $attrs
      * @param $filterWith
@@ -170,7 +175,9 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Filter by Panels, if '*' is provided then
+     * check this panel exists within the defined
+     * panels. Else look for specific panels.
      *
      * @param $attrs
      * @param $filterWith
@@ -210,7 +217,9 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Filter by Page, if '*' is provided then
+     * check we are on a page before passing.
+     * Else check all values using 'is_page()'
      *
      * @param $attrs
      * @param $filterWith
@@ -235,7 +244,9 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Filter by Post, if '*' is provided then
+     * check we are on a single before passing.
+     * Else check all values using 'is_single()'
      *
      * @param $attrs
      * @param $filterWith
@@ -260,7 +271,9 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Filter by Category, if '*' is provided then
+     * check we are on a category page before passing.
+     * Else check all values using 'is_category()'
      *
      * @param $attrs
      * @param $filterWith
@@ -285,7 +298,8 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Filter by Archive, check if the page is a archive
+     * using 'is_archive()'.
      *
      * @param $attrs
      * @param $filterWith
@@ -297,7 +311,8 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Filter by Search, check if this is a search page
+     * using 'is_search()'.
      *
      * @param $attrs
      * @param $filterWith
@@ -309,7 +324,9 @@ class Enqueue {
     }
 
     /**
-     * @todo description
+     * Filter by Post Type, check all values using
+     * 'get_post_type()'. Select all '*' is not
+     * supported. In that case you 'filterPost'
      *
      * @param $attrs
      * @param $filterWith

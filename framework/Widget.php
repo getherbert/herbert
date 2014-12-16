@@ -20,7 +20,7 @@ class Widget {
     }
 
     /**
-     * Registers a widget.
+     * Registers a widget then calls its boot method after.
      *
      * @param $widget
      */

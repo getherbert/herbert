@@ -20,7 +20,8 @@ class General {
     }
 
     /**
-     * Activates the plugin.
+     * Registers your callback or controller method to be called
+     * when the plugin is activated
      *
      * @param $callback
      */
@@ -33,7 +34,8 @@ class General {
     }
 
     /**
-     * Deactivates the plugin.
+     * Registers your callback or controller method to be called
+     * when the plugin is deactivated
      *
      * @param $callback
      */

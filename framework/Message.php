@@ -16,7 +16,8 @@ class Message {
     }
 
     /**
-     * @todo description
+     * Sets success class referred to as 'updated'
+     * in wordpress before calling 'display()'
      *
      * @param $message
      */
@@ -26,7 +27,8 @@ class Message {
     }
 
     /**
-     * @todo description
+     * Sets warning/notice class referred to as 'update-nag'
+     * in wordpress before calling 'display()'
      *
      * @param $message
      */
@@ -36,7 +38,8 @@ class Message {
     }
 
     /**
-     * @todo description
+     * Sets error class referred to as 'error'
+     * in wordpress before calling 'display()'
      *
      * @param $message
      */
@@ -46,7 +49,8 @@ class Message {
     }
 
     /**
-     * @todo description
+     * Outputs a message to the Wordpress admin area
+     * using 'add_action'
      *
      * @param $message
      * @param $class

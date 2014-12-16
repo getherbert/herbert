@@ -20,7 +20,7 @@ class BaseWidget extends \WP_Widget {
     }
 
     /**
-     * @todo description
+     * Outputs the content of the widget
      *
      * @param $args
      * @param $instance
@@ -31,7 +31,7 @@ class BaseWidget extends \WP_Widget {
     }
 
     /**
-     * @todo description
+     * Outputs the options form on admin
      *
      * @param $instance
      */
@@ -41,7 +41,7 @@ class BaseWidget extends \WP_Widget {
     }
 
     /**
-     * @todo description
+     * Processing widget options on save
      *
      * @param $new_instance
      * @param $old_instance

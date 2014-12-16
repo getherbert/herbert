@@ -56,7 +56,7 @@ class Http {
     }
 
     /**
-     * @todo description
+     * Gets all PUT request parameters
      *
      * @return array
      */
@@ -68,7 +68,7 @@ class Http {
     }
 
     /**
-     * @todo description
+     * Gets all DELETE request parameters
      *
      * @return array
      */
@@ -80,46 +80,38 @@ class Http {
     }
 
     /**
-     * @todo description
+     * Parses the raw http output of PUT & DELETE and return
+     * an array similar to $_POST
      *
-     * @param array $a_data
+     * @param array $inputBlocks
      */
-    private function parseRawHttpRequest(array &$a_data)
+    private function parseRawHttpRequest(array &$inputBlocks)
     {
-        // read incoming data
         $input = file_get_contents('php://input');
 
-        // grab multipart boundary from content type header
         preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
         $boundary = $matches[1];
 
-        // split content by boundary and get rid of last -- element
-        $a_blocks = preg_split("/-+$boundary/", $input);
-        array_pop($a_blocks);
+        $inputBlocks = preg_split("/-+$boundary/", $input);
+        array_pop($inputBlocks);
 
-        // loop data blocks
-        foreach ($a_blocks as $id => $block)
+        foreach ($inputBlocks as $id => $block)
         {
             if (empty($block))
             {
                 continue;
             }
 
-            // you'll have to var_dump $block to understand this and maybe replace \n or \r with a visibile char
-
-            // parse uploaded files
             if (strpos($block, 'application/octet-stream') !== false)
             {
-                // match "name", then everything after "stream" (optional) except for prepending newlines
                 preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
-            } // parse all other fields
+            }
             else
             {
-                // match "name" and optional value in between newline sequences
                 preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
             }
 
-            $a_data[$matches[1]] = $matches[2];
+            $inputBlocks[$matches[1]] = $matches[2];
         }
     }
 

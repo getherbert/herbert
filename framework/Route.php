@@ -39,7 +39,8 @@ class Route {
     }
 
     /**
-     * @todo description
+     * Adds the route to wordpress 'add_action'
+     * before calling 'addRoute'
      *
      * @param $attrs
      * @param $method
@@ -54,7 +55,7 @@ class Route {
     }
 
     /**
-     * @todo description
+     * Adds the route to wordpress 'add_rewrite_rule'
      *
      * @param $attrs
      * @param $method
@@ -106,7 +107,7 @@ class Route {
     }
 
     /**
-     * @todo description
+     * Calls controller method or callback related to the route
      *
      * @param $name
      * @param $method
@@ -137,7 +138,7 @@ class Route {
     }
 
     /**
-     * @todo description
+     * Returns route URL
      *
      * @param       $name
      * @param array $args
@@ -204,7 +205,7 @@ class Route {
     }
 
     /**
-     * @todo description
+     * Adds the 'route_name' tag to Wordpress
      */
     public function addRouteTag()
     {
@@ -212,7 +213,7 @@ class Route {
     }
 
     /**
-     * @todo description
+     * Flushes Wordpress werite rules
      */
     public function flushRules()
     {
@@ -220,7 +221,8 @@ class Route {
     }
 
     /**
-     * @todo description
+     * Catches requests and checks if they contain 'route_name'
+     * before passing them to 'processRoute()'
      *
      * @param $wp
      */
