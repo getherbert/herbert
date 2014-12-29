@@ -172,7 +172,7 @@ class Panel {
             return '';
         }
 
-        return $this->adminUrl . '/admin.php?page=' . $this->panels[$name]['slug'];
+        return $this->plugin->adminUrl . '/admin.php?page=' . $this->panels[$name]['slug'];
     }
 
 }
