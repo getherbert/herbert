@@ -168,7 +168,7 @@ class Route {
             $route['uri'] = strtr($route['uri'], $pairs);
         }
 
-        return $this->siteUrl . $route['uri'];
+        return $this->plugin->siteUrl . $route['uri'];
     }
 
     /**
