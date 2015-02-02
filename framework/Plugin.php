@@ -94,9 +94,9 @@ class Plugin {
     {
         $plugin = $this;
 
-	    foreach ($this->config['buildFiles'] as $filename) {
+        foreach ($this->config['buildFiles'] as $filename) {
             require_once $this->config['path']['plugin'] . $filename;
-	    }
+        }
     }
 
     /**
