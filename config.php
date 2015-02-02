@@ -11,5 +11,16 @@ return [
     'core'      => 'plugin.php',
     'api'       => 'myPluginApi',
     'name'      => 'My Plugin',
+	'buildFiles'=> [
+		'activate.php',
+		'deactivate.php',
+		'panels.php',
+		'routes.php',
+		'enqueue.php',
+		'api.php',
+		'shortcodes.php',
+		'widgets.php',
+		'customPostTypes.php',
+	],
     'eloquent'  => true
 ];

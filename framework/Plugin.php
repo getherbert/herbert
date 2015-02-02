@@ -94,14 +94,9 @@ class Plugin {
     {
         $plugin = $this;
 
-        require_once $this->config['path']['plugin'] . 'activate.php';
-        require_once $this->config['path']['plugin'] . 'deactivate.php';
-        require_once $this->config['path']['plugin'] . 'panels.php';
-        require_once $this->config['path']['plugin'] . 'routes.php';
-        require_once $this->config['path']['plugin'] . 'enqueue.php';
-        require_once $this->config['path']['plugin'] . 'api.php';
-        require_once $this->config['path']['plugin'] . 'shortcodes.php';
-        require_once $this->config['path']['plugin'] . 'widgets.php';
+	    foreach ($this->config['buildFiles'] as $filename) {
+            require_once $this->config['path']['plugin'] . $filename;
+	    }
     }
 
     /**
