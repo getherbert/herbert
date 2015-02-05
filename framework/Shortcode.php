@@ -28,7 +28,7 @@ class Shortcode {
      */
     public function add($shortcode, $fn, $args = [])
     {
-        \add_shortcode($shortcode, function ($atts) use ($fn, $args) {
+        \add_shortcode($shortcode, function ($atts = []) use ($fn, $args) {
             if (!empty($args))
             {
                 $atts = $this->renameArguments($args, $atts);
