@@ -29,11 +29,9 @@ class Shortcode {
     public function add($shortcode, $fn, $args = [])
     {
         \add_shortcode($shortcode, function ($atts) use ($fn, $args) {
-
-          $atts = (!empty($args)) ? $this->renameArguments($args, $atts) : array();
+          $atts = (!empty($args)) ? $this->renameArguments($args, $atts) : [];
 
           call_user_func_array([$this->api, $fn], $atts);
-          
         });
     }
 
