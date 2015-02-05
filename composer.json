@@ -12,7 +12,8 @@
     "classmap": [
       "framework",
       "plugin/controllers",
-      "plugin/models"
+      "plugin/models",
+      "plugin/widgets"
     ]
   }
 }
