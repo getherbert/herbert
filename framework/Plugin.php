@@ -53,13 +53,13 @@ class Plugin {
 
         $c = $config;
 
-        $c['path']['base'] = str_replace('framework/Plugin.php', '', __FILE__);
+        $c['path']['base'] = str_replace('framework' . DIRECTORY_SEPARATOR . 'Plugin.php', '', __FILE__);
         $c['path']['core'] = $c['path']['base'] . $c['core'];
-        $c['path']['plugin'] = $c['path']['base'] . $c['plugin'] . '/';
-        $c['path']['controllers'] = $c['path']['plugin'] . 'controllers' . '/';
-        $c['path']['views'] = $c['path']['plugin'] . $c['views'] . '/';
-        $c['path']['assets'] = $c['path']['plugin'] . $c['assets'] . '/';
-        $c['path']['widgets'] = $c['path']['plugin'] . 'widgets' . '/';
+        $c['path']['plugin'] = $c['path']['base'] . $c['plugin'] . DIRECTORY_SEPARATOR;
+        $c['path']['controllers'] = $c['path']['plugin'] . 'controllers' . DIRECTORY_SEPARATOR;
+        $c['path']['views'] = $c['path']['plugin'] . $c['views'] . DIRECTORY_SEPARATOR;
+        $c['path']['assets'] = $c['path']['plugin'] . $c['assets'] . DIRECTORY_SEPARATOR;
+        $c['path']['widgets'] = $c['path']['plugin'] . 'widgets' . DIRECTORY_SEPARATOR;
 
         $c['url']['base'] = str_replace('framework/', '', plugin_dir_url(__FILE__));
         $c['url']['plugin'] = $c['url']['base'] . $c['plugin'] . '/';
