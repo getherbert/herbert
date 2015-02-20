@@ -85,6 +85,8 @@ class Plugin {
         $this->contain('database', new Database($this));
         $this->contain('shortcode', new Shortcode($this));
         $this->contain('widget', new Widget($this));
+        $this->contain('config', new Config($this));
+        
     }
 
     /**
@@ -102,6 +104,7 @@ class Plugin {
         require_once $this->config['path']['plugin'] . 'api.php';
         require_once $this->config['path']['plugin'] . 'shortcodes.php';
         require_once $this->config['path']['plugin'] . 'widgets.php';
+        require_once $this->config['path']['plugin'] . 'config.php';
     }
 
     /**
