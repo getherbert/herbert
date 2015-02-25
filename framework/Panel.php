@@ -79,9 +79,7 @@ class Panel {
             function () use ($attrs)
             {
                 $this->plugin->controller->call($attrs['uses']);
-            },
-	        $icon,
-	        isset($attrs['position']) ? $attrs['position'] : null
+            }, $icon
         );
     }
 
