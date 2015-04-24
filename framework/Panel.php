@@ -104,7 +104,7 @@ class Panel {
         }
 
         $attrs['icon'] = ltrim($attrs['icon'], '/');
-        return $this->config['url']['assets'] . $attrs['icon'];
+        return $this->plugin->config['url']['assets'] . $attrs['icon'];
     }
 
     /**
