@@ -65,14 +65,14 @@ class Route {
         $uri = preg_replace(
             $this->regex,
             "(.+)",
-            $attrs['uri']
+            $attrs['route']
         );
         $uri = ltrim($uri, '/');
 
         $vars = [];
         preg_match_all(
             $this->regex,
-            $attrs['uri'],
+            $attrs['route'],
             $vars
         );
 
