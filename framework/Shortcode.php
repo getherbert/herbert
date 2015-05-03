@@ -34,7 +34,7 @@ class Shortcode {
                 $atts = $this->renameArguments($args, $atts);
             }
 
-            call_user_func_array([$this->api, $fn], $atts);
+            return call_user_func_array([$this->api, $fn], $atts);
         });
     }
 
