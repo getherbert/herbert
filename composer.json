@@ -3,7 +3,7 @@
   "description": "Herbert plugin",
   "license": "MIT",
   "require": {
-    "getherbert/framework": "0.9.*"
+    "getherbert/framework": "~0.9"
   },
   "config": {
     "preferred-install": "dist"

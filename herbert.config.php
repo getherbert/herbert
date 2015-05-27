@@ -4,6 +4,11 @@
 return [
 
     /**
+     * The Herbert version constraint.
+     */
+    'constraint' => '~0.9',
+
+    /**
      * Auto-load all required files.
      */
     'requires' => [
