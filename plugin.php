@@ -2,7 +2,7 @@
 
 /**
  * @wordpress-plugin
- * Plugin Name:       Plugin Name
+ * Plugin Name:       MyPlugin
  * Plugin URI:        http://plugin-name.com/
  * Description:       A plugin.
  * Version:           1.0.0
@@ -12,16 +12,4 @@
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
-
-// Initialise framework
-$plugin = new Herbert\Framework\Plugin();
-
-if ($plugin->config['eloquent'])
-{
-    $plugin->database->eloquent();
-}
-
-if (!get_option('permalink_structure'))
-{
-    $plugin->message->error($plugin->name . ': Please ensure you have permalinks enabled.');
-}
+require_once __DIR__ . '/vendor/getherbert/framework/bootstrap/autoload.php';

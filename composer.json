@@ -1,19 +1,17 @@
 {
-  "name": "getherbert/herbert",
-  "description": "Herbert",
-  "type": "wordpress-plugin",
+  "name": "getherbert/herbert-plugin",
+  "description": "Herbert plugin",
   "license": "MIT",
   "require": {
-    "composer/installers": "1.0.*",
-    "twig/twig": "1.16.*",
-    "illuminate/database": "4.2.*"
+    "getherbert/framework": "0.9.*"
   },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "minimum-stability": "dev",
   "autoload": {
-    "classmap": [
-      "framework",
-      "plugin/controllers",
-      "plugin/models",
-      "plugin/widgets"
-    ]
+    "psr-4": {
+      "MyPlugin\\": "app/"
+    }
   }
 }
