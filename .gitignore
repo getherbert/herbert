@@ -54,9 +54,6 @@ testing
 wp-config-local.php
 wp-config-live.php
 
-# Provided App Template
-app/*
-
 # PHP Testing
 !app/phpspec.yaml
 !app/phpunit.xml
