@@ -15,6 +15,21 @@ return [
         __DIR__ . '/app/customPostTypes.php'
     ],
 
+
+    /**
+     * Activate
+     */
+    'activators' => [
+        __DIR__ . '/app/activate.php'
+    ],
+
+    /**
+     * Activate
+     */
+    'deactivators' => [
+        __DIR__ . '/app/deactivate.php'
+    ],
+
     /**
      * The routes to auto-load.
      */
@@ -49,7 +64,7 @@ return [
     'enqueue' => [
         __DIR__ . '/app/enqueue.php'
     ],
-    
+
     /**
      * The routes to auto-load.
      */
@@ -81,12 +96,12 @@ return [
     'views' => [
         'MyPlugin' => __DIR__ . '/resources/views'
     ],
-    
+
     /**
      * The view globals.
      */
     'viewGlobals' => [
-        
+
     ],
 
     /**
