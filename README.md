@@ -3,7 +3,7 @@ Herbert
 
 Welcome to the Herbert. Please check out the docs [here](http://getherbert.com/).
 
-> **Note:**  Note: Herbert going through a update and should be up ready to use by 30th May.
+> **Note:** Herbert going through a update and should be up ready to use by 30th May.
 
 If your after the old verison you can find it here:
 
