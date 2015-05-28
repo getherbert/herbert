@@ -28,9 +28,9 @@ class Helper {
      */
     public static function boot()
     {
-        self::$base = substr(plugin_dir_url(), strlen(home_url()));
-        self::$base = self::$base . basename(dirname(__DIR__)) . '/';
-        self::$base = rtrim(ABSPATH, '/') . self::$base;
+        self::$base = substr(plugin_dir_url(__FILE__), strlen(home_url()));
+        self::$base = dirname(self::$base);
+        self::$base = rtrim(ABSPATH, '/') . self::$base . '/';
 
         self::$config = @require self::$base . '/herbert.config.php';
 
