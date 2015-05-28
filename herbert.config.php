@@ -49,6 +49,20 @@ return [
     'enqueue' => [
         __DIR__ . '/app/enqueue.php'
     ],
+    
+    /**
+     * The routes to auto-load.
+     */
+    'routes' => [
+        'MyPlugin' => __DIR__ . '/app/routes.php'
+    ],
+
+    /**
+     * The panels to auto-load.
+     */
+    'panels' => [
+        'MyPlugin' => __DIR__ . '/app/panels.php'
+    ],
 
     /**
      * The APIs to auto-load.
@@ -66,6 +80,13 @@ return [
      */
     'views' => [
         'MyPlugin' => __DIR__ . '/resources/views'
+    ],
+    
+    /**
+     * The view globals.
+     */
+    'viewGlobals' => [
+        
     ],
 
     /**
