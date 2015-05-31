@@ -15,7 +15,6 @@ return [
         __DIR__ . '/app/customPostTypes.php'
     ],
 
-
     /**
      * Activate
      */
@@ -28,20 +27,6 @@ return [
      */
     'deactivators' => [
         __DIR__ . '/app/deactivate.php'
-    ],
-
-    /**
-     * The routes to auto-load.
-     */
-    'routes' => [
-        __DIR__ . '/app/routes.php'
-    ],
-
-    /**
-     * The panels to auto-load.
-     */
-    'panels' => [
-        __DIR__ . '/app/panels.php'
     ],
 
     /**
