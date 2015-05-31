@@ -151,9 +151,12 @@ class Route {
         {
             if (isset($this->routes[$method]))
             {
-                $route = $this->routes[$method];
+                if (array_key_exists($name, $this->routes[$method]))
+                {
+                    $route = $this->routes[$method][$name];
 
-                break;
+                    break;
+                 }
             }
         }
 
