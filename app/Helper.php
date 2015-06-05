@@ -100,7 +100,9 @@ class Helper {
      */
     public static function assetUrl($file = null)
     {
-        return rtrim(home_url(), '/') . '/' . substr(self::asset($file), strlen(ABSPATH));
+        return content_url(
+            substr(self::asset($file), strlen(content_directory()))
+        );
     }
 
 }
