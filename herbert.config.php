@@ -6,7 +6,7 @@ return [
     /**
      * The Herbert version constraint.
      */
-    'constraint' => '~0.9.4',
+    'constraint' => '~0.9.6',
 
     /**
      * Auto-load all required files.
