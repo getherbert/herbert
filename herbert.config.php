@@ -14,6 +14,13 @@ return [
     'requires' => [
         __DIR__ . '/app/customPostTypes.php'
     ],
+    
+    /**
+     * The tables to manage.
+     */
+    'tables' => [
+    ],
+
 
     /**
      * Activate
