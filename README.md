@@ -3,7 +3,7 @@ Herbert
 
 Welcome to the Herbert. Please check out the docs [here](http://getherbert.com/).
 
-Example plugin should be available by 7th June 2015.
+Check out the example plugin [here](https://github.com/getherbert/example-plugin).
 
 ---
 If your after the old version you can find it here: https://github.com/getherbert/herbert/tree/pre
