@@ -51,7 +51,7 @@ return [
     ],
 
     /**
-     * The widgets to auto-load.
+     * The styles and scripts to auto-load.
      */
     'enqueue' => [
         __DIR__ . '/app/enqueue.php'
