@@ -30,7 +30,7 @@ return [
     ],
 
     /**
-     * Activate
+     * Deactivate
      */
     'deactivators' => [
         __DIR__ . '/app/deactivate.php'
